@@ -1,7 +1,6 @@
 import {
     initializeApp
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 
 import {
@@ -13,8 +12,7 @@ import {
     remove,
     update,
     runTransaction
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 import {
@@ -22,8 +20,7 @@ import {
     signInWithEmailAndPassword,
     onAuthStateChanged,
     signOut
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
 
@@ -332,6 +329,7 @@ logoutBtn.addEventListener(
         } catch (error) {
 
             console.error(
+                "Logout Error:",
                 error
             );
 
@@ -442,7 +440,8 @@ productForm.addEventListener(
 
 
             productMessage.textContent =
-                "Could not add product.";
+                "Could not add product.\n" +
+                error.message;
 
         }
 
@@ -465,7 +464,9 @@ function loadProducts() {
 
 
     onValue(
+
         productsRef,
+
         snapshot => {
 
             adminProducts.innerHTML =
@@ -569,6 +570,7 @@ function loadProducts() {
 
                             <button
                                 class="delete-btn"
+                                type="button"
                             >
                                 Delete
                             </button>
@@ -587,10 +589,9 @@ function loadProducts() {
 
                     deleteBtn.addEventListener(
                         "click",
-                        () =>
-                            deleteProduct(
-                                id
-                            )
+                        () => {
+                            deleteProduct(id);
+                        }
                     );
 
 
@@ -601,7 +602,29 @@ function loadProducts() {
                 }
             );
 
+        },
+
+        error => {
+
+            console.error(
+                "Products Load Error:",
+                error
+            );
+
+
+            adminProducts.innerHTML =
+                `
+                <p class="empty">
+                    Could not load products.
+                    <br><br>
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </p>
+                `;
+
         }
+
     );
 
 }
@@ -622,29 +645,55 @@ async function deleteProduct(
         );
 
 
-    if (!confirmed)
+    if (!confirmed) {
+
         return;
+
+    }
 
 
     try {
 
-        await remove(
+        console.log(
+            "Deleting product:",
+            id
+        );
+
+
+        const productRef =
             ref(
                 db,
-                `products/${id}`
-            )
+                "products/" + id
+            );
+
+
+        await remove(
+            productRef
+        );
+
+
+        console.log(
+            "Product deleted successfully:",
+            id
+        );
+
+
+        alert(
+            "Product deleted successfully!"
         );
 
 
     } catch (error) {
 
         console.error(
+            "Delete Product Error:",
             error
         );
 
 
         alert(
-            "Could not delete product."
+            "Could not delete product.\n\n" +
+            error.message
         );
 
     }
@@ -666,8 +715,18 @@ function loadOrders() {
         );
 
 
+    adminOrders.innerHTML =
+        `
+        <p class="empty">
+            Loading orders...
+        </p>
+        `;
+
+
     onValue(
+
         ordersRef,
+
         snapshot => {
 
             adminOrders.innerHTML =
@@ -727,7 +786,33 @@ function loadOrders() {
                 }
             );
 
+        },
+
+        error => {
+
+            console.error(
+                "Orders Load Error:",
+                error
+            );
+
+
+            orderCount.textContent =
+                "0 Orders";
+
+
+            adminOrders.innerHTML =
+                `
+                <p class="empty">
+                    Could not load orders.
+                    <br><br>
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </p>
+                `;
+
         }
+
     );
 
 }
@@ -925,6 +1010,7 @@ function renderOrder(
 
                     <button
                         class="confirm-btn"
+                        type="button"
                     >
                         Confirm Order
                     </button>
@@ -976,12 +1062,18 @@ async function confirmOrder(
 
     const confirmed =
         confirm(
-            `Confirm this order?\n\n${order.productName || "Product"}`
+            `Confirm this order?\n\n${
+                order.productName ||
+                "Product"
+            }`
         );
 
 
-    if (!confirmed)
+    if (!confirmed) {
+
         return;
+
+    }
 
 
 
@@ -1073,7 +1165,8 @@ async function confirmOrder(
 
 
         alert(
-            "Could not confirm order."
+            "Could not confirm order.\n\n" +
+            error.message
         );
 
     }
