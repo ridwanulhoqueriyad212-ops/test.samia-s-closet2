@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Samia's Closet</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+    <!-- PAYMENT EXTRA CSS -->
+    <style>
+
+        .payment-box {
+
+            display: none;
+
+            margin-top: 12px;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            background: #fff5f8;
+
+            border: 1px solid #e91e63;
+
+        }
+
+        .payment-box.active {
+
+            display: block;
+
+        }
+
+        .payment-box.nagad-box {
+
+            background: #fff8ed;
+
+            border-color: #f28c00;
+
+        }
+
+        .payment-number {
+
+            font-size: 18px;
+
+            font-weight: 800;
+
+            margin: 7px 0;
+
+            color: #d81b60;
+
+            word-break: break-word;
+
+        }
+
+        .nagad-box .payment-number {
+
+            color: #d66f00;
+
+        }
+
+        .payment-note {
+
+            font-size: 12px;
+
+            line-height: 1.6;
+
+            margin-bottom: 10px;
+
+            color: #555;
+
+        }
+
+        .trx-input {
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            padding: 11px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 8px;
+
+            outline: none;
+
+            font-size: 14px;
+
+        }
+
+        .trx-input:focus {
+
+            border-color: #e91e63;
+
+        }
+
+        .nagad-box .trx-input:focus {
+
+            border-color: #f28c00;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+    <div class="logo-area">
+
+        <img
+            src="./1790671626420.jpg"
+            alt="Samia's Closet Logo"
+            class="site-logo"
+        >
+
+        <div class="logo">
+            Samia's <span>Closet</span>
+        </div>
+
+    </div>
+
+
+    <a
+        href="./admin.html"
+        class="admin-btn"
+    >
+        Admin
+    </a>
+
+</header>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div>
+
+            <small>
+                WELCOME TO
+            </small>
+
+            <h1>
+                Samia's Closet
+            </h1>
+
+            <p>
+                Choose your favourite products and order easily.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- PRODUCTS -->
+
+    <section class="products-section">
+
+        <div class="section-title">
+
+            <div>
+
+                <small>
+                    OUR PRODUCTS
+                </small>
+
+                <h2>
+                    Products
+                </h2>
+
+            </div>
+
+            <span id="productCount">
+                0 Products
+            </span>
+
+        </div>
+
+
+        <div
+            id="productsGrid"
+            class="products-grid"
+        ></div>
+
+
+        <div
+            id="emptyProducts"
+            class="empty"
+        >
+
+            <div>
+                🛍️
+            </div>
+
+            <h3>
+                No Products Yet
+            </h3>
+
+            <p>
+                Products will appear here.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- ================= WHATSAPP ================= -->
+
+<a
+    id="whatsappBtn"
+    class="whatsapp"
+    target="_blank"
+    rel="noopener"
+>
+
+    <span>
+        💬
+    </span>
+
+    WhatsApp Support
+
+</a>
+
+
+
+<!-- ================= OVERLAY ================= -->
+
+<div
+    id="overlay"
+    class="overlay"
+></div>
+
+
+
+<!-- ================= ORDER MODAL ================= -->
+
+<div
+    id="orderModal"
+    class="modal"
+>
+
+    <div class="modal-box">
+
+
+        <button
+            class="close"
+            onclick="closeOrderModal()"
+        >
+            ×
+        </button>
+
+
+        <small>
+            PLACE ORDER
+        </small>
+
+
+        <h2 id="orderProductName">
+            Product
+        </h2>
+
+
+        <div
+            id="orderProductPrice"
+            class="modal-price"
+        >
+            ৳0
+        </div>
+
+
+
+        <form id="orderForm">
+
+
+            <input
+                type="hidden"
+                id="orderProductId"
+            >
+
+
+            <!-- NAME -->
+
+            <label>
+
+                Name
+
+                <input
+                    type="text"
+                    id="customerName"
+                    placeholder="Your name"
+                    required
+                >
+
+            </label>
+
+
+
+            <!-- PHONE -->
+
+            <label>
+
+                Phone
+
+                <input
+                    type="tel"
+                    id="customerPhone"
+                    placeholder="01XXXXXXXXX"
+                    required
+                >
+
+            </label>
+
+
+
+            <!-- ADDRESS -->
+
+            <label>
+
+                Address
+
+                <textarea
+                    id="customerAddress"
+                    placeholder="Your full address"
+                    required
+                ></textarea>
+
+            </label>
+
+
+
+            <!-- PAYMENT -->
+
+            <label>
+                Payment Method
+            </label>
+
+
+            <div class="payments">
+
+
+                <!-- COD -->
+
+                <label class="payment">
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="COD"
+                        checked
+                    >
+
+                    <span>
+
+                        <b>
+                            Cash on Delivery
+                        </b>
+
+                        <small>
+                            Pay when product arrives
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+
+                <!-- BKASH -->
+
+                <label class="payment">
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="bKash"
+                    >
+
+                    <span>
+
+                        <b>
+                            bKash
+                        </b>
+
+                        <small>
+                            Pay through bKash
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+
+                <!-- NAGAD -->
+
+                <label class="payment">
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="Nagad"
+                    >
+
+                    <span>
+
+                        <b>
+                            Nagad
+                        </b>
+
+                        <small>
+                            Pay through Nagad
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+            </div>
+
+
+
+            <!-- ================= BKASH BOX ================= -->
+
+            <div
+                id="bkashPaymentBox"
+                class="payment-box"
+            >
+
+                <b>
+                    🟣 bKash Payment
+                </b>
+
+
+                <div class="payment-number">
+
+                    bKash Number:
+
+                    <span id="bkashNumberDisplay">
+                        8801314652599
+                    </span>
+
+                </div>
+
+
+                <div class="payment-note">
+
+                    এই নম্বরে bKash payment করার পর
+                    নিচের Transaction ID (TrxID) লিখে
+                    Confirm Order করুন।
+
+                </div>
+
+
+                <input
+                    type="text"
+                    id="bkashTrxId"
+                    class="trx-input"
+                    placeholder="Enter bKash Transaction ID"
+                >
+
+            </div>
+
+
+
+            <!-- ================= NAGAD BOX ================= -->
+
+            <div
+                id="nagadPaymentBox"
+                class="payment-box nagad-box"
+            >
+
+                <b>
+                    🟠 Nagad Payment
+                </b>
+
+
+                <div class="payment-number">
+
+                    Nagad Number:
+
+                    <span id="nagadNumberDisplay">
+                        01XXXXXXXXX
+                    </span>
+
+                </div>
+
+
+                <div class="payment-note">
+
+                    এই নম্বরে Nagad payment করার পর
+                    নিচের Transaction ID (TrxID) লিখে
+                    Confirm Order করুন।
+
+                </div>
+
+
+                <input
+                    type="text"
+                    id="nagadTrxId"
+                    class="trx-input"
+                    placeholder="Enter Nagad Transaction ID"
+                >
+
+            </div>
+
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="submit-btn"
+            >
+                Confirm Order
+            </button>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- ================= SUCCESS ================= -->
+
+<div
+    id="successBox"
+    class="success"
+>
+
+    <div class="success-icon">
+        ✓
+    </div>
+
+
+    <h2>
+        Order Placed!
+    </h2>
+
+
+    <p>
+        Your order has been received successfully.
+    </p>
+
+
+    <button onclick="closeSuccess()">
+        Continue Shopping
+    </button>
+
+</div>
+
+
+
+<script
+    type="module"
+    src="./index.js"
+></script>
+
+
+</body>
+</html>
+
